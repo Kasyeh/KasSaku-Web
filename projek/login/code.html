@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - KasSaku</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#5A9E38", 
+                        "primary-hover": "#4a852c",
+                        "background-light": "#F3F4F6", 
+                        "background-dark": "#111827", 
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1F2937",
+                        "input-bg-light": "#F9FAFB", 
+                        "input-bg-dark": "#374151",
+                        "text-main-light": "#111827",
+                        "text-main-dark": "#F9FAFB",
+                        "text-muted-light": "#6B7280",
+                        "text-muted-dark": "#9CA3AF",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                    },
+                    boxShadow: {
+                        'soft': '0 25px 50px -12px rgba(0, 0, 0, 0.08)',
+                        'input': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .dark .bg-pattern {
+            background-image: radial-gradient(#374151 1px, transparent 1px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4 bg-pattern relative overflow-hidden transition-colors duration-300">
+<div class="absolute top-10 left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+<div class="absolute bottom-10 right-10 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+<div class="absolute bottom-1/4 left-1/4 w-24 h-24 bg-yellow-400/10 rounded-full blur-3xl"></div>
+<div class="w-full max-w-[1000px] bg-card-light dark:bg-card-dark rounded-2xl shadow-soft flex overflow-hidden min-h-[600px] z-10 transition-colors duration-300">
+<div class="hidden lg:flex lg:w-1/2 relative bg-primary flex-col justify-end p-12 text-white overflow-hidden group">
+<div class="absolute inset-0 z-0">
+<img alt="Financial documents and calculator on a desk" class="w-full h-full object-cover opacity-30 mix-blend-overlay group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtF257luXiT4c_sx4FKpKgN5ZbHugY6xO1S8bcd7MkJt96XqB1BfH_X8gEkSfg32yzYE28Wv6odMN_WPifVyLWWa-95NUs06gaBKxRsvMZSm1ZxA33EAO89T72Pka3U3E1UEBfrXWJUWBKhEC8u_xM2Sbe09oKNTBtfHZehxs7prbajSpju4bjFtsw67xqBPKYwST0stUI1yLAR5bFt06VkOqSt0cPqwQQdjPk6IZK5XA1GTEhTr0vSo0okguIDo0BF3J75V93m1o8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/70 to-primary/40"></div>
+</div>
+<div class="relative z-10 space-y-8">
+<div>
+<h2 class="text-3xl font-bold mb-3 leading-tight tracking-tight">Kelola Uang Mulai Dari Saku</h2>
+<p class="text-white/90 text-sm leading-relaxed max-w-sm">
+                    KasSaku membantu Anda mengatur keuangan dengan mudah dan efektif. Mulailah perjalanan finansial yang lebih baik hari ini.
+                </p>
+</div>
+<div class="space-y-5 pt-2">
+<div class="flex items-center space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-white text-[20px]">trending_up</span>
+</div>
+<span class="text-sm font-medium text-white/95">Pantau pengeluaran dan pemasukan secara real-time</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-white text-[20px]">notifications_active</span>
+</div>
+<span class="text-sm font-medium text-white/95">Notifikasi pengeluaran dan anggaran bulanan</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined text-white text-[20px]">lock</span>
+</div>
+<span class="text-sm font-medium text-white/95">Keamanan data terjamin dengan enkripsi terkini</span>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-1/2 p-8 md:p-16 flex flex-col justify-center bg-white dark:bg-card-dark">
+<div class="w-full max-w-md mx-auto">
+<div class="text-center mb-10">
+<div class="inline-flex items-center justify-center mb-6">
+<div class="bg-primary/5 p-4 rounded-2xl">
+<span class="material-symbols-outlined text-primary text-4xl">account_balance_wallet</span>
+</div>
+</div>
+<h1 class="text-3xl font-bold text-text-main-light dark:text-text-main-dark mb-2 tracking-tight">Welcome Back</h1>
+<p class="text-text-muted-light dark:text-text-muted-dark">Please enter your details to sign in.</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-text-main-light dark:text-text-main-dark ml-1" for="username">Username</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors text-[20px]">person</span>
+</div>
+<input class="block w-full pl-11 pr-3 py-3.5 border-0 ring-1 ring-gray-200 dark:ring-gray-700 bg-input-bg-light dark:bg-input-bg-dark text-text-main-light dark:text-text-main-dark rounded-xl focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-gray-800 transition-all duration-200 sm:text-sm placeholder-gray-400 dark:placeholder-gray-500 shadow-input" id="username" name="username" placeholder="Enter your username" type="text" value="user"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-medium text-text-main-light dark:text-text-main-dark ml-1" for="password">Password</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-11 pr-10 py-3.5 border-0 ring-1 ring-gray-200 dark:ring-gray-700 bg-input-bg-light dark:bg-input-bg-dark text-text-main-light dark:text-text-main-dark rounded-xl focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-gray-800 transition-all duration-200 sm:text-sm placeholder-gray-400 dark:placeholder-gray-500 shadow-input" id="password" name="password" placeholder="•••••" type="password"/>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-symbols-outlined text-gray-400 text-[20px]">visibility</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-sm pt-1">
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 cursor-pointer" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-text-muted-light dark:text-text-muted-dark cursor-pointer select-none" for="remember-me">Remember me</label>
+</div>
+<div>
+<a class="font-medium text-primary hover:text-primary-hover transition-colors" href="#">Forgot Password?</a>
+</div>
+</div>
+<div class="pt-4">
+<button class="group w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-lg shadow-primary/25 text-sm font-semibold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 transform hover:-translate-y-0.5" type="submit">
+<span class="material-symbols-outlined text-white mr-2 text-[20px] group-hover:animate-pulse">login</span>
+                        Sign In
+                    </button>
+</div>
+</form>
+<p class="mt-12 text-center text-sm text-text-muted-light dark:text-text-muted-dark">
+                Don't have an account? 
+                <a class="font-semibold text-primary hover:text-primary-hover transition-colors" href="#">Create one</a>
+</p>
+</div>
+</div>
+</div>
+
+</body></html>

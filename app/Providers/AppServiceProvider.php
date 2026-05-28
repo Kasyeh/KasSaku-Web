@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use App\Models\PermintaanUnblockModel;
 use App\Models\NotificationHistory;
+use App\Models\FeedbackModel;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,8 +37,20 @@ class AppServiceProvider extends ServiceProvider
                 ->first();
             $latestPendingTimestamp = (int) optional($latestPendingRequest?->created_at)->timestamp;
 
+            $pendingFeedbackCount = 0;
+            $latestPendingFeedbackTimestamp = 0;
+            if (Schema::hasTable('tb_feedback')) {
+                $pendingFeedbackCount = FeedbackModel::where('is_read', 0)->count();
+                $latestPendingFeedback = FeedbackModel::where('is_read', 0)
+                    ->orderByDesc('created_at')
+                    ->first();
+                $latestPendingFeedbackTimestamp = (int) optional($latestPendingFeedback?->created_at)->timestamp;
+            }
+
             $view->with('pendingUnblockCount', $pendingCount);
             $view->with('pendingUnblockLatestTimestamp', $latestPendingTimestamp);
+            $view->with('pendingFeedbackCount', $pendingFeedbackCount);
+            $view->with('pendingFeedbackLatestTimestamp', $latestPendingFeedbackTimestamp);
         });
 
         View::composer('template.masteru', function ($view) {

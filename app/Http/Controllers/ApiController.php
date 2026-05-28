@@ -10,6 +10,7 @@ use App\Models\TransactionModel;
 use App\Models\ImpianModel;
 use App\Models\BudgetKategoriModel;
 use App\Models\PermintaanUnblockModel;
+use App\Models\FeedbackModel;
 use Illuminate\Support\Facades\Hash;
 use App\Services\TransactionService;
 use App\Services\CashflowService;
@@ -17,6 +18,7 @@ use App\Services\ImpianProgressService;
 use App\Services\BalanceService;
 use App\Services\BalanceResetService;
 use App\Services\StatisticService;
+use App\Services\FirebaseService;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PDF;
@@ -1203,5 +1205,37 @@ class ApiController extends Controller
             'over' => $budget->isOverBudget(),
             'periode_label' => $budget->getPeriodeLabel(),
         ];
+    }
+
+    public function sendFeedback(Request $request)
+    {
+        $request->validate([
+            'subjek' => 'required|string|max:255',
+            'pesan' => 'required|string',
+            'rating' => 'nullable|integer|min:1|max:5',
+        ]);
+
+        $user = Auth::user();
+
+        $feedback = FeedbackModel::create([
+            'id_user' => $user->id_user,
+            'subjek' => $request->subjek,
+            'pesan' => $request->pesan,
+            'rating' => $request->rating,
+            'is_read' => 0
+        ]);
+
+        // Trigger RTDB notification for admin
+        $firebaseService = app(FirebaseService::class);
+        $firebaseService->notifyNewFeedback([
+            'id_user' => $user->id_user,
+            'username' => $user->username,
+            'subjek' => $feedback->subjek
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Umpan balik berhasil dikirim'
+        ]);
     }
 }

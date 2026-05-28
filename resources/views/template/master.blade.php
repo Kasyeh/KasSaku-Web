@@ -128,6 +128,19 @@
           @endif
         </a>
 
+        <a href="{{ url('admin/feedback') }}"
+          class="flex items-center justify-between px-4 py-3.5 text-sm font-medium rounded-xl transition-all group {{ Request::is('admin/feedback*') ? 'nav-link-active shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5' }}">
+          <div class="flex items-center">
+            <span class="material-icons-round mr-3 text-xl transition-transform group-hover:scale-110">feedback</span>
+            Umpan Balik User
+          </div>
+          @if(isset($pendingFeedbackCount) && $pendingFeedbackCount > 0)
+            <span class="flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-amber-500 text-white text-[10px] font-black rounded-full animate-pulse shadow-lg shadow-amber-500/30">
+              {{ $pendingFeedbackCount }}
+            </span>
+          @endif
+        </a>
+
         <div class="pt-8 px-4 mb-4 text-[10px] font-black uppercase tracking-widest text-slate-400 opacity-70">Sistem
         </div>
 
@@ -359,6 +372,39 @@
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.href = "{{ route('admin.permintaan_unblock') }}";
+          }
+        });
+
+        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      }
+    });
+
+    let pendingFeedbackWatermark = Number("{{ (int) ($pendingFeedbackLatestTimestamp ?? 0) }}");
+    const feedbackRef = ref(db, 'admin/feedback_notifications');
+
+    onChildAdded(feedbackRef, (snapshot) => {
+      const data = snapshot.val();
+      const requestTimestamp = Number(data?.timestamp ?? 0);
+
+      if (data?.status === 'pending' && requestTimestamp > pendingFeedbackWatermark) {
+        pendingFeedbackWatermark = requestTimestamp;
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Feedback Baru',
+          text: `Ada pesan baru dari ${data.username}`,
+          showConfirmButton: true,
+          confirmButtonText: 'Baca',
+          confirmButtonColor: '#f59e0b',
+          timer: 10000,
+          timerProgressBar: true,
+          background: document.documentElement.classList.contains('dark') ? '#1e1e2d' : '#fff',
+          color: document.documentElement.classList.contains('dark') ? '#fff' : '#1e1e2d',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "{{ url('admin/feedback') }}";
           }
         });
 

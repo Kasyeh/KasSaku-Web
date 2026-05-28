@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\SmartAssistantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,8 @@ Route::middleware(['auth:sanctum', 'active.api'])->group(function () {
     Route::post('/target-pengeluaran/simpan', [ApiController::class, 'simpanTargetPengeluaran']);
     Route::post('/user/reset-saldo', [ApiController::class, 'resetSaldo']);
     Route::post('/user/profile/update-email', [UserController::class, 'updateEmail']);
+    Route::post('/user/profile/update-password', [UserController::class, 'updatePassword']);
+    Route::post('/user/profile/update-currency', [UserController::class, 'updateCurrency']);
 
     // Transaksi
     Route::get('/me/riwayat', [ApiController::class, 'getRiwayat']);
@@ -65,6 +68,11 @@ Route::middleware(['auth:sanctum', 'active.api'])->group(function () {
     Route::post('/impian/{id_impian}/setoran', [ApiController::class, 'setorImpian']);
     Route::post('/impian/hapus/{id_impian}', [ApiController::class, 'hapusImpian']);
 
+    // Smart Assistant (Nudges & Chatbot)
+    Route::get('/me/smart-nudges', [SmartAssistantController::class, 'getNudges']);
+    Route::post('/me/chatbot/ask', [SmartAssistantController::class, 'askChatbot']);
+    Route::post('/me/chatbot/reset', [SmartAssistantController::class, 'resetChatbot']);
+
     // Statistik
     Route::get('/me/statistik', [ApiController::class, 'getStatistik']);
     Route::get('/user/{id}/statistik', [ApiController::class, 'getStatistik']);
@@ -74,6 +82,9 @@ Route::middleware(['auth:sanctum', 'active.api'])->group(function () {
     Route::get('/user/{id}/budget-kategori', [ApiController::class, 'getBudgetKategori']);
     Route::post('/user/budget-kategori/simpan', [ApiController::class, 'simpanBudgetKategori']);
     Route::post('/user/budget-kategori/hapus/{id}', [ApiController::class, 'hapusBudgetKategori']);
+
+    // Feedback
+    Route::post('/feedback', [ApiController::class, 'sendFeedback']);
 
     // FCM Notification Routes
     Route::post('/fcm-token', [NotificationController::class, 'saveFcmToken']);

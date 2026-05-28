@@ -16,6 +16,10 @@ use App\Services\CashflowService;
 use App\Services\BalanceService;
 use App\Services\FinancialReminderService;
 use App\Services\StatisticService;
+use App\Services\NudgeService;
+use App\Services\ChatbotService;
+use App\Services\FirebaseService;
+use App\Models\FeedbackModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -57,10 +61,14 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $balance = \App\Models\BalanceModel::where('id_user', $user->id_user)->first();
+        $nudges = NudgeService::getSmartNudges((int) $user->id_user);
+        $motivasi = MotivasiModel::all();
 
         return view('user.home', [
             'user' => $user,
-            'balance' => $balance
+            'balance' => $balance,
+            'nudges' => $nudges,
+            'motivasi' => $motivasi
         ]);
     }
 
@@ -872,4 +880,126 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Permintaan unblock telah dikirim ke admin.');
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'new_password.required' => 'Password baru wajib diisi.',
+            'new_password.min' => 'Password baru minimal 6 karakter.',
+            'new_password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+        ]);
+
+        $user = User::find(Auth::id());
+        if (!$user || !Hash::check($request->current_password, $user->password)) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Password saat ini salah.',
+                ], 422);
+            }
+            return redirect()->back()->withErrors(['current_password' => 'Password saat ini salah.']);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Password berhasil diubah.',
+            ]);
+        }
+        return redirect()->back()->with('success', 'Password berhasil diubah.');
+    }
+
+    public function updateCurrency(Request $request)
+    {
+        $request->validate([
+            'currency' => 'required|string|in:IDR,USD,MYR',
+            'currency_format' => 'nullable|string|in:compact,standard',
+        ]);
+
+        $user = User::find(Auth::id());
+        $user->currency = $request->currency;
+        if ($request->has('currency_format')) {
+            $user->currency_format = $request->currency_format;
+        }
+        $user->save();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengaturan mata uang berhasil diperbarui.',
+                'data' => [
+                    'currency' => $user->currency,
+                    'currency_format' => $user->currency_format,
+                ]
+            ]);
+        }
+        return redirect()->back()->with('success', 'Pengaturan mata uang berhasil diperbarui.');
+    }
+
+    public function sendFeedbackWeb(Request $request)
+    {
+        $request->validate([
+            'subjek' => 'required|string|max:255',
+            'pesan' => 'required|string',
+            'rating' => 'nullable|integer|min:1|max:5',
+        ]);
+
+        $user = Auth::user();
+        $feedback = FeedbackModel::create([
+            'id_user' => $user->id_user,
+            'subjek' => $request->subjek,
+            'pesan' => $request->pesan,
+            'rating' => $request->rating,
+            'status' => 'pending', // matching feedback table columns
+        ]);
+
+        try {
+            $firebaseService = app(FirebaseService::class);
+            $firebaseService->notifyNewFeedback([
+                'id_user' => $user->id_user,
+                'username' => $user->username,
+                'subjek' => $feedback->subjek
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('RTDB Feedback Notify Error: ' . $e->getMessage());
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Umpan balik berhasil dikirim!',
+            ]);
+        }
+        return redirect()->back()->with('success', 'Umpan balik berhasil dikirim!');
+    }
+
+    public function webChatbotAsk(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $userId = Auth::id();
+        $result = ChatbotService::processMessage((int) $userId, $request->message);
+
+        return response()->json($result);
+    }
+
+    public function webChatbotReset(Request $request)
+    {
+        $userId = Auth::id();
+        $cacheKey = 'chatbot_history_' . $userId;
+        cache()->forget($cacheKey);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Riwayat obrolan asisten berhasil direset.',
+        ]);
+    }
 }

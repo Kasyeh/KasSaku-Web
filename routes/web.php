@@ -55,6 +55,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/permintaan-unblock/proses/{id}', [AdminController::class, 'prosesUnblock'])->name('admin.proses_unblock');
     Route::post('/admin/permintaan-unblock/hapus/{id}', [AdminController::class, 'hapusPermintaanUnblock'])->name('admin.hapus_permintaan_unblock');
     Route::post('/admin/permintaan-unblock/bulk-hapus', [AdminController::class, 'bulkHapusPermintaanUnblock'])->name('admin.bulk_hapus_permintaan_unblock');
+
+    Route::get('/admin/feedback', [AdminController::class, 'feedback'])->name('admin.feedback');
+    Route::post('/admin/feedback/mark-read/{id}', [AdminController::class, 'markFeedbackRead'])->name('admin.feedback.mark_read');
     // Admin/motivasi
     Route::get('/motivasi', [MotivasiController::class, 'motivasi'])->name('motivasi');
     Route::get('/motivasi/tambah', [MotivasiController::class, 'tambahMotivasi'])->name('tambahMotivasi');
@@ -82,6 +85,13 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/user/notifications', [UserController::class, 'getNotificationHistory'])->name('user.notifications.index');
     Route::post('/user/notifications/read-all', [UserController::class, 'markNotificationHistoryAsRead'])->name('user.notifications.read_all');
     Route::post('/user/profile/update-email', [UserController::class, 'updateEmail'])->name('user.update_email');
+    Route::post('/user/profile/update-password', [UserController::class, 'updatePassword'])->name('user.update_password');
+    Route::post('/user/profile/update-currency', [UserController::class, 'updateCurrency'])->name('user.update_currency');
+    Route::post('/user/feedback', [UserController::class, 'sendFeedbackWeb'])->name('user.send_feedback');
+
+    // Chatbot Web Routes
+    Route::post('/user/chatbot/ask', [UserController::class, 'webChatbotAsk'])->name('user.chatbot.ask');
+    Route::post('/user/chatbot/reset', [UserController::class, 'webChatbotReset'])->name('user.chatbot.reset');
 
     // Avatar Routes
     Route::post('/user/profile/avatar/upload', [\App\Http\Controllers\AvatarController::class, 'upload'])->name('user.avatar.upload');

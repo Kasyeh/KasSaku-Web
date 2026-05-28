@@ -146,6 +146,89 @@
           </form>
         </div>
 
+        {{-- Preferensi Keamanan & Mata Uang --}}
+        <div
+          class="bg-surface-light dark:bg-surface-dark rounded-[40px] p-8 shadow-card border border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/10 flex items-center justify-center text-indigo-500">
+              <span class="material-icons-round">settings</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Preferensi Keuangan</p>
+              <h4 class="text-lg font-black text-slate-800 dark:text-white mt-1">Keamanan & Mata Uang</h4>
+            </div>
+          </div>
+
+          {{-- Ganti Password Form --}}
+          <div class="border-b border-slate-50 dark:border-slate-800/50 pb-6 mb-6">
+            <h5 class="text-xs font-black text-slate-700 dark:text-slate-200 mb-4 uppercase tracking-wider">Ganti Password</h5>
+            <form action="{{ route('user.update_password') }}" method="POST" class="space-y-4">
+              @csrf
+              <div>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Password Saat Ini</label>
+                <div class="relative group mt-1">
+                  <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">lock_open</span>
+                  <input type="password" name="current_password" required
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-white/5 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all font-bold text-xs text-slate-800 dark:text-white">
+                </div>
+              </div>
+              <div>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Password Baru</label>
+                <div class="relative group mt-1">
+                  <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">lock</span>
+                  <input type="password" name="new_password" required
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-white/5 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all font-bold text-xs text-slate-800 dark:text-white">
+                </div>
+              </div>
+              <div>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Konfirmasi Password Baru</label>
+                <div class="relative group mt-1">
+                  <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">enhanced_encryption</span>
+                  <input type="password" name="new_password_confirmation" required
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-white/5 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all font-bold text-xs text-slate-800 dark:text-white">
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs transition-all active:scale-95">
+                Update Password
+              </button>
+            </form>
+          </div>
+
+          {{-- Preferensi Mata Uang --}}
+          <div>
+            <h5 class="text-xs font-black text-slate-700 dark:text-slate-200 mb-4 uppercase tracking-wider">Mata Uang & Format</h5>
+            <form action="{{ route('user.update_currency') }}" method="POST" class="space-y-4">
+              @csrf
+              <div>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Mata Uang Utama</label>
+                <div class="relative group mt-1">
+                  <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">payments</span>
+                  <select name="currency" required
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-white/5 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all font-bold text-xs text-slate-800 dark:text-white appearance-none">
+                    <option value="IDR" {{ Auth::user()->currency == 'IDR' ? 'selected' : '' }}>IDR (Rupiah)</option>
+                    <option value="USD" {{ Auth::user()->currency == 'USD' ? 'selected' : '' }}>USD (Dollar)</option>
+                    <option value="MYR" {{ Auth::user()->currency == 'MYR' ? 'selected' : '' }}>MYR (Ringgit)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Format Tampilan</label>
+                <div class="relative group mt-1">
+                  <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors">visibility</span>
+                  <select name="currency_format" required
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-white/5 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/50 transition-all font-bold text-xs text-slate-800 dark:text-white appearance-none">
+                    <option value="standard" {{ Auth::user()->currency_format == 'standard' ? 'selected' : '' }}>Standar (e.g. 10.000.000)</option>
+                    <option value="compact" {{ Auth::user()->currency_format == 'compact' ? 'selected' : '' }}>Ringkas (e.g. 10Jt / 10M)</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-xs transition-all active:scale-95 shadow-lg shadow-indigo-600/20">
+                Simpan Preferensi
+              </button>
+            </form>
+          </div>
+        </div>
+
         <div
           class="bg-surface-light dark:bg-surface-dark rounded-[40px] p-8 shadow-card border border-slate-100 dark:border-slate-800">
           <div class="flex items-center justify-between gap-4 mb-6">

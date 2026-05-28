@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use App\Models\TransactionModel;
 use App\Models\PermintaanUnblockModel;
+use App\Models\FeedbackModel;
 use App\Services\FirebaseService;
 use Illuminate\Support\Str;
 use Session;
@@ -393,5 +394,20 @@ class AdminController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Password salah!'], 401);
+    }
+
+    public function feedback()
+    {
+        $feedbacks = FeedbackModel::with('user')->orderBy('created_at', 'desc')->get();
+        return view('admin.feedback', compact('feedbacks'));
+    }
+
+    public function markFeedbackRead($id)
+    {
+        $feedback = FeedbackModel::findOrFail($id);
+        $feedback->is_read = 1;
+        $feedback->save();
+
+        return response()->json(['success' => true]);
     }
 }

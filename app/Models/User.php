@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $primaryKey = 'id_user';
-    protected $fillable = ['username', 'email', 'password', 'role', 'active', 'fcm_token', 'google_id', 'avatar'];
+    protected $fillable = ['username', 'email', 'password', 'role', 'active', 'fcm_token', 'google_id', 'avatar', 'currency', 'currency_format'];
     protected $hidden = ['password', 'remember_token'];
     public $timestamps = false;
     public function santri()

@@ -401,4 +401,30 @@ class FirebaseService
             ]);
         }
     }
+
+    /**
+     * Notify admin about new feedback via RTDB
+     */
+    public function notifyNewFeedback($data)
+    {
+        if (!$this->database)
+            return;
+
+        try {
+            $this->database->getReference("admin/feedback_notifications")
+                ->push([
+                    'user_id' => $data['id_user'],
+                    'username' => $data['username'] ?? 'Unknown',
+                    'subjek' => $data['subjek'],
+                    'timestamp' => now()->timestamp,
+                    'status' => 'pending'
+                ]);
+            Log::info('RTDB feedback notification published', [
+                'user_id' => (int) $data['id_user'],
+                'subjek' => $data['subjek'],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('RTDB Feedback Notification Error: ' . $e->getMessage());
+        }
+    }
 }

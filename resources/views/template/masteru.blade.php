@@ -350,6 +350,83 @@
     </div>
   </div>
 
+  <style>
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <!-- Floating Chatbot Widget -->
+  <div class="fixed bottom-24 right-8 z-[60] flex flex-col items-end">
+    <!-- Chat Container -->
+    <div id="chatbot-container" class="hidden w-[360px] h-[500px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/50 dark:border-white/10 rounded-[30px] shadow-2xl flex flex-col overflow-hidden mb-4 transition-all duration-300 transform translate-y-4 opacity-0 scale-95 origin-bottom-right">
+      <!-- Header -->
+      <div class="p-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+            <span class="material-icons-round">smart_toy</span>
+          </div>
+          <div>
+            <h4 class="text-xs font-black tracking-wide">Asisten KasSaku</h4>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-[8px] font-bold text-white/80 uppercase tracking-widest">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button onclick="resetChat()" title="Reset Percakapan" class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors">
+            <span class="material-icons-round text-sm">refresh</span>
+          </button>
+          <button onclick="toggleChatbot()" class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors">
+            <span class="material-icons-round text-sm">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div id="chatbot-messages" class="flex-1 p-4 overflow-y-auto space-y-3 scroll-smooth text-xs">
+        <div class="flex gap-2.5 max-w-[85%]">
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+            <span class="material-icons-round text-base">smart_toy</span>
+          </div>
+          <div class="bg-slate-100 dark:bg-white/5 p-3 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed">
+            Halo! Saya asisten keuangan KasSaku. Ada yang bisa saya bantu hari ini?
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggestion Chips -->
+      <div class="px-4 py-2 border-t border-slate-100 dark:border-white/5 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-none scroll-smooth">
+        <button onclick="sendSuggestion('Berapa saldo saya?')" class="px-3 py-1.5 bg-slate-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border border-slate-200/50 dark:border-white/5 hover:border-indigo-200 dark:hover:border-indigo-500/20 text-[10px] text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold rounded-full transition-all">
+          Cek Saldo
+        </button>
+        <button onclick="sendSuggestion('Bagaimana pengeluaran saya bulan ini?')" class="px-3 py-1.5 bg-slate-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border border-slate-200/50 dark:border-white/5 hover:border-indigo-200 dark:hover:border-indigo-500/20 text-[10px] text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold rounded-full transition-all">
+          Histori Belanja
+        </button>
+        <button onclick="sendSuggestion('Berikan tips hemat')" class="px-3 py-1.5 bg-slate-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border border-slate-200/50 dark:border-white/5 hover:border-indigo-200 dark:hover:border-indigo-500/20 text-[10px] text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold rounded-full transition-all">
+          Tips Hemat
+        </button>
+        <button onclick="sendSuggestion('Bantuan')" class="px-3 py-1.5 bg-slate-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border border-slate-200/50 dark:border-white/5 hover:border-indigo-200 dark:hover:border-indigo-500/20 text-[10px] text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold rounded-full transition-all">
+          Bantuan
+        </button>
+      </div>
+
+      <!-- Input Form -->
+      <form id="chatbot-form" onsubmit="handleChatSubmit(event)" class="p-3 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/50 flex gap-2">
+        <input type="text" id="chatbot-input" placeholder="Tulis pesan..." autocomplete="off" class="flex-1 bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
+        <button type="submit" class="w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 transition-all active:scale-95">
+          <span class="material-icons-round text-base">send</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="chatbot-toggle-btn" onclick="toggleChatbot()" class="bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 hover:scale-105 active:scale-95 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white transition-all relative group">
+      <span class="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 blur-md opacity-50 group-hover:opacity-80 transition-opacity"></span>
+      <span class="material-icons-round text-xl relative z-10 block group-hover:rotate-12 transition-transform">smart_toy</span>
+    </button>
+  </div>
+
   <!-- Global Floating Dark Mode Toggle -->
   <div class="fixed bottom-8 right-8 z-[60]">
     <button
@@ -364,6 +441,165 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
+    function toggleChatbot() {
+        const container = document.getElementById('chatbot-container');
+        const btnIcon = document.querySelector('#chatbot-toggle-btn .material-icons-round');
+        
+        if (container.classList.contains('hidden')) {
+            container.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
+                container.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+            }, 10);
+            btnIcon.innerText = 'close';
+        } else {
+            container.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
+            container.classList.add('opacity-0', 'translate-y-4', 'scale-95');
+            setTimeout(() => {
+                container.classList.add('hidden');
+            }, 300);
+            btnIcon.innerText = 'smart_toy';
+        }
+    }
+
+    function addMessage(text, isUser = false) {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const msgDiv = document.createElement('div');
+        
+        if (isUser) {
+            msgDiv.className = 'flex justify-end gap-2.5 max-w-[85%] ml-auto';
+            msgDiv.innerHTML = `
+                <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none leading-relaxed">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+        } else {
+            msgDiv.className = 'flex gap-2.5 max-w-[85%]';
+            msgDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                    <span class="material-icons-round text-base">smart_toy</span>
+                </div>
+                <div class="bg-slate-100 dark:bg-white/5 p-3 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    ${text}
+                </div>
+            `;
+        }
+        
+        messagesContainer.appendChild(msgDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function addLoadingIndicator() {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const loaderDiv = document.createElement('div');
+        loaderDiv.id = 'chatbot-loader';
+        loaderDiv.className = 'flex gap-2.5 max-w-[85%]';
+        loaderDiv.innerHTML = `
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                <span class="material-icons-round text-base">smart_toy</span>
+            </div>
+            <div class="bg-slate-100 dark:bg-white/5 p-3 rounded-2xl rounded-tl-none text-slate-500 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
+                <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
+                <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
+            </div>
+        `;
+        messagesContainer.appendChild(loaderDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function removeLoadingIndicator() {
+        const loader = document.getElementById('chatbot-loader');
+        if (loader) {
+            loader.remove();
+        }
+    }
+
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    async function handleChatSubmit(e) {
+        if (e) e.preventDefault();
+        
+        const input = document.getElementById('chatbot-input');
+        const message = input.value.trim();
+        if (!message) return;
+        
+        input.value = '';
+        addMessage(message, true);
+        
+        addLoadingIndicator();
+        
+        try {
+            const response = await fetch("{{ route('user.chatbot.ask') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            const data = await response.json();
+            removeLoadingIndicator();
+            
+            if (data.success && data.reply) {
+                addMessage(data.reply, false);
+            } else {
+                addMessage('Maaf, asisten sedang sibuk. Silakan coba lagi nanti.', false);
+            }
+        } catch (error) {
+            removeLoadingIndicator();
+            addMessage('Koneksi internet bermasalah. Silakan periksa jaringan Anda.', false);
+            console.error('Chatbot error:', error);
+        }
+    }
+
+    function sendSuggestion(text) {
+        const input = document.getElementById('chatbot-input');
+        input.value = text;
+        handleChatSubmit();
+    }
+
+    async function resetChat() {
+        if (!confirm('Apakah Anda yakin ingin mereset riwayat chat asisten?')) return;
+        
+        try {
+            const response = await fetch("{{ route('user.chatbot.reset') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                const messagesContainer = document.getElementById('chatbot-messages');
+                messagesContainer.innerHTML = `
+                    <div class="flex gap-2.5 max-w-[85%]">
+                      <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                        <span class="material-icons-round text-base">smart_toy</span>
+                      </div>
+                      <div class="bg-slate-100 dark:bg-white/5 p-3 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed">
+                        Halo! Saya asisten keuangan KasSaku. Ada yang bisa saya bantu hari ini?
+                      </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Reset chatbot error:', error);
+        }
+    }
+
     // Animated Number Counter Utility
     function animateNumber(element, start, end, duration) {
         if (!element) return;

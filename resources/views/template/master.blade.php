@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KasSaku Admin - Smart Finance Hub</title>
-  <link rel="icon" href="{{ url('logo-kassaku.svg') }}" type="image/svg+xml">
-  <link rel="shortcut icon" href="{{ url('logo-kassaku.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ url('logo-kassaku.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ url('logo-kassaku.png') }}" type="image/png">
   <link rel="manifest" href="{{ url('assets/favicon/manifest.json') }}">
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -79,7 +79,7 @@
       <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50 dark:border-slate-800/50">
         <div class="flex items-center">
           <div class="w-8 h-8 rounded-lg overflow-hidden shadow-lg mr-3 shadow-primary-500/20 bg-slate-900">
-            <img src="{{ url('logo-kassaku.svg') }}" alt="KasSaku Logo" class="w-full h-full object-cover">
+            <img src="{{ url('logo-kassaku.png') }}" alt="KasSaku Logo" class="w-full h-full object-cover">
           </div>
           <span class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Pusat Admin</span>
         </div>

@@ -935,8 +935,39 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getBudgetKategori(Request $request, $id_user = null)
+    public function getAiInsight(Request $request)
     {
+        $id_user = $request->user()->id_user;
+        $period = $request->query('period', '30d');
+        
+        $cashflowSeries = \App\Services\CashflowService::buildSeries((int) $id_user);
+        
+        $insightText = "Data cashflow belum cukup untuk dianalisis.";
+        
+        if (isset($cashflowSeries[$period])) {
+            $series = $cashflowSeries[$period];
+            $net = $series['total_net'] ?? 0;
+            $changePct = $series['change_pct'] ?? 0;
+            $maxExpenseLabel = $series['max_expense_label'] ?? '-';
+            $maxExpenseValue = $series['max_expense_value'] ?? 0;
+            
+            $fmt = fn($v) => 'Rp ' . number_format((float)$v, 0, ',', '.');
+            
+            $direction = $changePct >= 0 ? '+' : '';
+            
+            $insightText = "Net periode ini: {$fmt($net)}. " .
+                           "Perubahan vs sebelumnya: {$direction}" . number_format($changePct, 1) . "%. " .
+                           "Uang keluar terbanyak di {$maxExpenseLabel} sebesar {$fmt($maxExpenseValue)}.";
+        }
+        
+        return response()->json([
+            'success' => true,
+            'insight' => $insightText,
+            'message' => 'Berhasil mendapatkan insight'
+        ]);
+    }
+
+    public function getBudgetKategori(Request $request, $id_user = null)    {
         if ($response = $this->guardPathUserIdMatch($request, $id_user)) {
             return $response;
         }

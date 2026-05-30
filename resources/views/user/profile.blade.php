@@ -359,6 +359,125 @@
         </div>
       </div>
     </div>
+
+    {{-- Feedback Section --}}
+    <div class="max-w-6xl mx-auto mt-8">
+      <div class="relative overflow-hidden bg-surface-light dark:bg-surface-dark rounded-[40px] shadow-card border border-slate-100 dark:border-slate-800">
+
+        {{-- Decorative gradient header --}}
+        <div class="relative px-8 pt-8 pb-6 border-b border-slate-100 dark:border-white/5">
+          <div class="absolute inset-0 bg-gradient-to-r from-violet-500/5 via-indigo-500/5 to-transparent pointer-events-none rounded-t-[40px]"></div>
+          <div class="relative flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/30">
+                <span class="material-icons-round">rate_review</span>
+              </div>
+              <div>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Bantu Kami Berkembang</p>
+                <h4 class="text-xl font-black text-slate-800 dark:text-white mt-0.5 tracking-tight">Kirim Masukan</h4>
+              </div>
+            </div>
+            <span class="hidden sm:flex items-center gap-2 text-[10px] font-black text-violet-500 bg-violet-50 dark:bg-violet-500/10 px-3 py-1.5 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+              Anonim & Aman
+            </span>
+          </div>
+        </div>
+
+        <div class="p-8">
+          <form id="feedback-form" action="{{ route('user.send_feedback') }}" method="POST" class="space-y-7">
+            @csrf
+
+            {{-- Kategori Feedback --}}
+            <div>
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Jenis Masukan</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+                @php
+                  $categories = [
+                    ['value' => 'Saran Fitur',  'icon' => 'lightbulb',       'color' => 'amber'],
+                    ['value' => 'Bug Report',   'icon' => 'bug_report',      'color' => 'rose'],
+                    ['value' => 'Pertanyaan',   'icon' => 'help_outline',    'color' => 'sky'],
+                    ['value' => 'Lainnya',      'icon' => 'more_horiz',      'color' => 'slate'],
+                  ];
+                  $colorMap = [
+                    'amber' => ['bg' => 'bg-amber-50 dark:bg-amber-500/10',  'border' => 'border-amber-400',  'text' => 'text-amber-600 dark:text-amber-400',  'ring' => 'ring-amber-400/40'],
+                    'rose'  => ['bg' => 'bg-rose-50 dark:bg-rose-500/10',    'border' => 'border-rose-400',   'text' => 'text-rose-600 dark:text-rose-400',    'ring' => 'ring-rose-400/40'],
+                    'sky'   => ['bg' => 'bg-sky-50 dark:bg-sky-500/10',      'border' => 'border-sky-400',    'text' => 'text-sky-600 dark:text-sky-400',      'ring' => 'ring-sky-400/40'],
+                    'slate' => ['bg' => 'bg-slate-50 dark:bg-white/5',       'border' => 'border-slate-400',  'text' => 'text-slate-600 dark:text-slate-300',  'ring' => 'ring-slate-400/40'],
+                  ];
+                @endphp
+
+                @foreach($categories as $cat)
+                  @php $c = $colorMap[$cat['color']]; @endphp
+                  <button type="button"
+                    data-category="{{ $cat['value'] }}"
+                    class="category-btn group relative flex flex-col items-center gap-2 px-4 py-4 rounded-2xl border-2 border-transparent bg-slate-50 dark:bg-white/5 hover:{{ $c['bg'] }} hover:border-{{ $cat['color'] }}-300 dark:hover:border-{{ $cat['color'] }}-500/50 transition-all duration-200">
+                    <span class="material-icons-round text-2xl text-slate-400 group-hover:{{ $c['text'] }} transition-colors">{{ $cat['icon'] }}</span>
+                    <span class="text-[11px] font-black text-slate-500 dark:text-slate-400 group-hover:{{ $c['text'] }} transition-colors tracking-wide">{{ $cat['value'] }}</span>
+                  </button>
+                @endforeach
+              </div>
+              <input type="hidden" name="kategori_feedback" id="kategori-input" value="{{ old('kategori_feedback', '') }}">
+            </div>
+
+            {{-- Subjek (Opsional) --}}
+            <div>
+              <div class="flex items-center justify-between ml-1 mb-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Subjek</label>
+                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">Opsional</span>
+              </div>
+              <div class="relative group">
+                <span class="material-icons-round absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-violet-500 transition-colors text-[20px]">title</span>
+                <input type="text" name="subjek" id="subjek-input" maxlength="100"
+                  placeholder="Judul singkat masukan Anda..."
+                  value="{{ old('subjek') }}"
+                  class="w-full pl-14 pr-6 py-4 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-violet-400/50 rounded-2xl focus:ring-0 transition-all font-semibold text-sm text-slate-800 dark:text-white placeholder-slate-400">
+              </div>
+            </div>
+
+            {{-- Pesan --}}
+            <div>
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 mb-2 block">Pesan <span class="text-rose-400">*</span></label>
+              <div class="relative group">
+                <textarea name="pesan" id="pesan-input" required rows="4" maxlength="1000"
+                  placeholder="Ceritakan pengalaman, saran, atau masalah yang Anda temui secara detail..."
+                  class="w-full px-6 py-4 bg-slate-50 dark:bg-white/5 border-2 border-transparent focus:border-violet-400/50 rounded-2xl focus:ring-0 transition-all font-medium text-sm text-slate-800 dark:text-white resize-none placeholder-slate-400">{{ old('pesan') }}</textarea>
+                <span id="char-count" class="absolute bottom-3 right-4 text-[10px] font-bold text-slate-400">0 / 1000</span>
+              </div>
+            </div>
+
+            {{-- Rating --}}
+            <div>
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 mb-3 block">Rating Pengalaman</label>
+              <div class="flex items-center gap-2" id="star-rating">
+                @for($i = 1; $i <= 5; $i++)
+                  <button type="button" data-value="{{ $i }}"
+                    class="star-btn relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-150 hover:scale-110 bg-slate-100 dark:bg-white/5 text-slate-300">
+                    <span class="material-icons-round text-2xl">star</span>
+                  </button>
+                @endfor
+                <div class="ml-3 flex flex-col">
+                  <span id="rating-label" class="text-sm font-black text-slate-400">—</span>
+                  <span id="rating-sublabel" class="text-[10px] text-slate-400 mt-0.5">Pilih bintang di atas</span>
+                </div>
+              </div>
+              <input type="hidden" name="rating" id="rating-input" value="">
+            </div>
+
+            {{-- Submit --}}
+            <div class="pt-2">
+              <button type="submit" id="feedback-submit-btn"
+                class="w-full py-4 bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white rounded-2xl font-black text-sm shadow-lg shadow-violet-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+                <span class="material-icons-round text-base group-hover:translate-x-0.5 transition-transform">send</span>
+                Kirim Masukan
+              </button>
+              <p class="text-center text-[10px] text-slate-400 mt-3">Masukan Anda akan langsung diterima oleh tim KasSaku</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
 @endsection
 
@@ -575,6 +694,105 @@
       @if(session('error'))
         Swal.fire({ icon: 'error', title: 'Gagal!', text: @json(session('error')), background: document.documentElement.classList.contains('dark') ? '#1e1e2d' : '#fff', color: document.documentElement.classList.contains('dark') ? '#fff' : '#1e1e2d' });
       @endif
+
+      // --- Star Rating Logic ---
+      const starBtns = document.querySelectorAll('.star-btn');
+      const ratingInput = document.getElementById('rating-input');
+      const ratingLabel = document.getElementById('rating-label');
+      const ratingSubLabel = document.getElementById('rating-sublabel');
+      const ratingData = [
+        { label: '—',            sub: 'Pilih bintang di atas',            color: 'text-slate-400' },
+        { label: 'Sangat Buruk', sub: 'Kami akan segera perbaiki',        color: 'text-rose-500' },
+        { label: 'Buruk',        sub: 'Terima kasih atas masukannya',     color: 'text-orange-500' },
+        { label: 'Cukup',        sub: 'Masih banyak ruang untuk tumbuh',  color: 'text-amber-500' },
+        { label: 'Bagus',        sub: 'Senang mendengarnya!',             color: 'text-lime-500' },
+        { label: 'Sangat Bagus', sub: 'Terima kasih! 🎉',                 color: 'text-emerald-500' },
+      ];
+
+      function updateStars(value) {
+        starBtns.forEach(btn => {
+          const v = parseInt(btn.dataset.value);
+          if (v <= value) {
+            btn.classList.remove('text-slate-300', 'bg-slate-100');
+            btn.classList.add('text-amber-400', 'bg-amber-50', 'scale-110');
+          } else {
+            btn.classList.remove('text-amber-400', 'bg-amber-50', 'scale-110');
+            btn.classList.add('text-slate-300', 'bg-slate-100');
+          }
+        });
+        const d = ratingData[value] || ratingData[0];
+        if (ratingLabel) { ratingLabel.textContent = d.label; ratingLabel.className = 'text-sm font-black transition-colors ' + d.color; }
+        if (ratingSubLabel) ratingSubLabel.textContent = d.sub;
+        ratingInput.value = value || '';
+      }
+
+      let selectedRating = 0;
+      starBtns.forEach(btn => {
+        btn.addEventListener('mouseenter', () => updateStars(parseInt(btn.dataset.value)));
+        btn.addEventListener('mouseleave', () => updateStars(selectedRating));
+        btn.addEventListener('click', () => {
+          selectedRating = parseInt(btn.dataset.value);
+          ratingInput.value = selectedRating;
+          updateStars(selectedRating);
+        });
+      });
+
+      // --- Category Selection Logic ---
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const kategoriInput = document.getElementById('kategori-input');
+      const subjekInput = document.getElementById('subjek-input');
+      const pesanInputEl = document.getElementById('pesan-input');
+
+      const activeCategoryClasses = {
+        'Saran Fitur': ['border-amber-400', 'bg-amber-50', 'dark:bg-amber-500/10'],
+        'Bug Report':  ['border-rose-400',  'bg-rose-50',  'dark:bg-rose-500/10'],
+        'Pertanyaan':  ['border-sky-400',   'bg-sky-50',   'dark:bg-sky-500/10'],
+        'Lainnya':     ['border-slate-400', 'bg-slate-100','dark:bg-white/10'],
+      };
+      const placeholderMap = {
+        'Saran Fitur': 'Fitur apa yang ingin Anda lihat di KasSaku?',
+        'Bug Report':  'Jelaskan bug yang Anda temui secara detail...',
+        'Pertanyaan':  'Apa yang ingin Anda tanyakan?',
+        'Lainnya':     'Ceritakan pengalaman atau masukan Anda...',
+      };
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = btn.dataset.category;
+          const isActive = kategoriInput.value === val;
+
+          // Reset semua tombol
+          categoryBtns.forEach(b => {
+            b.classList.remove('border-amber-400','border-rose-400','border-sky-400','border-slate-400',
+              'bg-amber-50','bg-rose-50','bg-sky-50','bg-slate-100',
+              'dark:bg-amber-500/10','dark:bg-rose-500/10','dark:bg-sky-500/10','dark:bg-white/10');
+            b.classList.add('border-transparent');
+          });
+
+          if (!isActive) {
+            kategoriInput.value = val;
+            const classes = activeCategoryClasses[val] || [];
+            btn.classList.remove('border-transparent');
+            classes.forEach(cls => btn.classList.add(cls));
+            if (pesanInputEl) pesanInputEl.placeholder = placeholderMap[val] || 'Ceritakan masukan Anda...';
+            if (subjekInput && !subjekInput.value) subjekInput.value = val;
+          } else {
+            kategoriInput.value = '';
+            if (subjekInput && subjekInput.value === val) subjekInput.value = '';
+          }
+        });
+      });
+
+      // --- Char Counter ---
+      const charCount = document.getElementById('char-count');
+      if (pesanInputEl && charCount) {
+        pesanInputEl.addEventListener('input', () => {
+          const len = pesanInputEl.value.length;
+          charCount.textContent = len + ' / 1000';
+          charCount.className = 'absolute bottom-3 right-4 text-[10px] font-bold transition-colors ' +
+            (len > 900 ? 'text-rose-400' : len > 700 ? 'text-amber-400' : 'text-slate-400');
+        });
+      }
 
       const toggle = document.getElementById('security-toggle');
       const form = document.getElementById('security-form');

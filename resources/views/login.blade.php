@@ -10,7 +10,7 @@
             <div class="hidden lg:flex flex-1 flex-col items-start space-y-8 animate-fade-in" style="animation-delay: 0.2s;">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-center shadow-xl border border-white/20">
-                        <img src="{{ url('logo-kassaku.svg') }}" alt="KasSaku" class="h-10 w-auto">
+                        <img src="{{ url('logo-kassaku.png') }}" alt="KasSaku" class="h-10 w-auto">
                     </div>
                     <span class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">KasSaku</span>
                 </div>
@@ -39,7 +39,7 @@
                 {{-- Mobile Logo --}}
                 <div class="lg:hidden flex justify-center mb-8">
                     <div class="w-20 h-20 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-center shadow-xl border border-white/20">
-                        <img src="{{ url('logo-kassaku.svg') }}" alt="KasSaku" class="h-12 w-auto">
+                        <img src="{{ url('logo-kassaku.png') }}" alt="KasSaku" class="h-12 w-auto">
                     </div>
                 </div>
 

@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KasSaku</title>
-  <link rel="icon" href="{{ url('logo-kassaku.svg') }}" type="image/svg+xml">
-  <link rel="shortcut icon" href="{{ url('logo-kassaku.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ url('logo-kassaku.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ url('logo-kassaku.png') }}" type="image/png">
   <link rel="manifest" href="{{ url('assets/favicon/manifest.json') }}">
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -112,7 +112,7 @@
         <div class="flex items-center">
           <div class="w-11 h-11 rounded-2xl overflow-hidden shadow-lg mr-3 bg-slate-950 flex items-center justify-center p-2 relative group transition-transform duration-500 hover:rotate-6">
             <div class="absolute inset-0 bg-primary-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <img src="{{ url('logo-kassaku.svg') }}" alt="KasSaku Logo" class="w-full h-full object-contain relative z-10 animate-float-sm">
+            <img src="{{ url('logo-kassaku.png') }}" alt="KasSaku Logo" class="w-full h-full object-contain relative z-10 animate-float-sm">
           </div>
           <span class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">KasSaku</span>
         </div>

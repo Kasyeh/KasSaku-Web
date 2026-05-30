@@ -945,18 +945,30 @@ class UserController extends Controller
     public function sendFeedbackWeb(Request $request)
     {
         $request->validate([
-            'subjek' => 'required|string|max:255',
-            'pesan' => 'required|string',
-            'rating' => 'nullable|integer|min:1|max:5',
+            'subjek'            => 'nullable|string|max:255',
+            'kategori_feedback' => 'nullable|string|max:50',
+            'pesan'             => 'required|string',
+            'rating'            => 'nullable|integer|min:1|max:5',
         ]);
 
         $user = Auth::user();
+
+        // Gabungkan kategori + subjek
+        $kategori = $request->kategori_feedback;
+        $subjek   = $request->subjek;
+        if ($kategori && !$subjek) {
+            $subjek = $kategori;
+        } elseif ($kategori && $subjek) {
+            $subjek = '[' . $kategori . '] ' . $subjek;
+        }
+
         $feedback = FeedbackModel::create([
             'id_user' => $user->id_user,
-            'subjek' => $request->subjek,
-            'pesan' => $request->pesan,
-            'rating' => $request->rating,
-            'status' => 'pending', // matching feedback table columns
+            'subjek'  => $subjek ?? 'Masukan Umum',
+            'pesan'   => $request->pesan,
+            'rating'  => $request->rating,
+            'is_read' => 0,
+            'status'  => 'pending',
         ]);
 
         try {

@@ -76,6 +76,7 @@ Route::middleware(['auth:sanctum', 'active.api'])->group(function () {
     // Statistik
     Route::get('/me/statistik', [ApiController::class, 'getStatistik']);
     Route::get('/user/{id}/statistik', [ApiController::class, 'getStatistik']);
+    Route::get('/user/statistik/ai-insight', [ApiController::class, 'getAiInsight']);
 
     // Budget Kategori
     Route::get('/me/budget-kategori', [ApiController::class, 'getBudgetKategori']);

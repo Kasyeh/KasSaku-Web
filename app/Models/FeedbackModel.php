@@ -10,7 +10,8 @@ class FeedbackModel extends Model
     use HasFactory;
 
     protected $table = 'tb_feedback';
-    protected $guarded = ['id'];
+    protected $primaryKey = 'id_feedback';
+    protected $fillable = ['id_user', 'subjek', 'pesan', 'rating', 'is_read', 'status'];
 
     public function user()
     {
